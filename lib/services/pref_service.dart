@@ -17,4 +17,9 @@ class PrefService {
   int get openCount => _prefs.getInt(_kOpenCount) ?? 0;
 
   Future<void> increaseOpenCount() => _prefs.setInt(_kOpenCount, openCount + 1);
+
+  static const _kDarkMode = 'is_dark_mode';
+  // ---------- Tema ----------
+  bool get isDarkMode => _prefs.getBool(_kDarkMode) ?? false;
+  Future<void> setDarkMode(bool value) => _prefs.setBool(_kDarkMode, value);
 }
