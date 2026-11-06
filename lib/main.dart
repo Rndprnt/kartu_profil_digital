@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'data/project_repository.dart';
-import 'models/project.dart';
-import 'pages/profile_page.dart';
+import 'pages/project_list_page.dart';
 import 'services/pref_service.dart';
 
 void main() async {
@@ -10,22 +8,6 @@ void main() async {
   final prefs = await PrefService.init();
   debugPrint('Isi prefs: ${prefs.debugKeys}');
   await prefs.increaseOpenCount();
-
-  // ⚠️ KODE UJI SEMENTARA — hapus setelah dicoba
-  final repo = ProjectRepository();
-  await repo.insert(
-    Project(
-      title: 'Kartu Profil Digital',
-      description: 'Aplikasi kartu profil dengan penyimpanan lokal.',
-      techStack: 'Flutter, Dart',
-      createdAt: DateTime.now(),
-    ),
-  );
-  final all = await repo.getAll();
-  debugPrint('Total proyek: ${all.length}');
-  for (final p in all) {
-    debugPrint('#${p.id} ${p.title} (${p.techStack})');
-  }
 
   runApp(MyApp(prefs: prefs));
 }
@@ -69,11 +51,7 @@ class _MyAppState extends State<MyApp> {
             brightness: Brightness.dark,
           ),
           themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-          home: ProfilePage(
-            prefs: widget.prefs,
-            isDark: isDark,
-            onThemeChanged: _changeTheme,
-          ),
+          home: const ProjectListPage(),
         );
       },
     );
