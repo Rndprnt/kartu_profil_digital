@@ -44,9 +44,8 @@ class _ProjectListPageState extends State<ProjectListPage> {
     await _repo.delete(p.id!);
     if (!mounted) return;
     _reload();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('"${p.title}" dihapus')),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('"${p.title}" dihapus')));
   }
 
   Future<void> _openForm([Project? project]) async {
@@ -96,11 +95,29 @@ class _ProjectListPageState extends State<ProjectListPage> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   isThreeLine: true,
-                  onTap: () => _openForm(p), // ← UPDATE: buka form dalam mode edit
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete_outline),
-                    tooltip: 'Hapus',
-                    onPressed: () => _confirmDelete(p), // ← DELETE
+                  onTap: () =>
+                      _openForm(p), // ← UPDATE: buka form dalam mode edit
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          p.isFavorite ? Icons.star : Icons.star_border,
+                        ),
+                        tooltip: 'Favorit',
+                        onPressed: () async {
+                          await _repo.update(
+                            p.copyWith(isFavorite: !p.isFavorite),
+                          );
+                          _reload();
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        tooltip: 'Hapus',
+                        onPressed: () => _confirmDelete(p),
+                      ),
+                    ],
                   ),
                 ),
               );
